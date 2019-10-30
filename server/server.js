@@ -1,27 +1,27 @@
-var chatList = []
-var userNum = 0;
+var userNum = 0; //统计在线人数
 var WebSocketServer = require('ws').Server;
-wss = new WebSocketServer({ port: 8181 });
+wss = new WebSocketServer({ port: 8181 }); //8181 与前端相对应
+//调用 broadcast 广播，实现数据互通和实时更新
 wss.broadcast = function (msg) {
     wss.clients.forEach(function each(client) {
         client.send(msg);
     });
 };
 wss.on('connection', function (ws) {
-    userNum++
-    wss.broadcast(JSON.stringify({ funName: 'userCount', users: userNum }))
+    userNum++;//建立连接成功在线人数 +1
+    wss.broadcast(JSON.stringify({ funName: 'userCount', users: userNum })); //建立连接成功广播一次当前在线人数
     console.log('Connected clients:', userNum);
     //接收前端发送过来的数据
-    ws.on('message', function (msg) {
-        if (msg) {
-            console.log('接收到来自clent的消息：' + msg)
-            wss.broadcast(msg)
-            // ws.send(msg);
-        }
+    ws.on('message', function (e) {
+        var resData = JSON.parse(e)
+        console.log('接收到来自clent的消息：' + resData.msg)
+        wss.broadcast(JSON.stringify({ userId: resData.userId, msg: resData.msg })); //每次发送都相当于广播一次消息
+        // ws.send(msg);
+
     });
     ws.on('close', function (e) {
-        userNum--;
-        wss.broadcast(JSON.stringify({ funName: 'userCount', users: userNum }))
+        userNum--;//建立连接关闭在线人数 -1
+        wss.broadcast(JSON.stringify({ funName: 'userCount', users: userNum }));//建立连接关闭广播一次当前在线人数
         console.log('Connected clients:', userNum);
         console.log('长连接已关闭')
     })

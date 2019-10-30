@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "nodejs-websocket": "^1.7.2",
-    "socket.io": "^2.3.0",
-    "uws": "^100.0.1",
     "vue": "^2.5.2",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^7.1.0",
     "vue-router": "^3.0.1",
     "vue-socket.io": "^3.0.7"
   },
