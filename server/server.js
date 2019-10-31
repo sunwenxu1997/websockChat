@@ -1,5 +1,5 @@
 var userNum = 0; //统计在线人数
-var chatList = []
+var chatList = [];//记录聊天记录
 var WebSocketServer = require('ws').Server;
 wss = new WebSocketServer({ port: 8181 }); //8181 与前端相对应
 //调用 broadcast 广播，实现数据互通和实时更新
